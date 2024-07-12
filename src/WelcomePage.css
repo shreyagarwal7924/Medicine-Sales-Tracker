@@ -1,0 +1,50 @@
+header {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 600px;
+    margin-top: 300px;
+    background: white;
+    padding-bottom: 30px;
+    border-radius: 50px;
+}
+
+h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+    color: blue;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.link{
+    display: flex;
+    align-items: center;
+    margin: auto;
+}
+
+.underline {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+    width: 450px;
+    height: 6px;
+    background: blue;
+    border-radius: 9px;
+}
+
+.login, .signup {
+    border: none;
+    background: blue;
+    color: white;
+    padding: 12px 24px;
+    margin: 8px;
+    font-size: 14px;
+    border-radius: 20px;
+    cursor: pointer;
+}

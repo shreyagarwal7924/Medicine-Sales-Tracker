@@ -1,0 +1,57 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 500px;
+  height: 300px;
+  margin-top: 300px;
+  background: white;
+  padding-bottom: 30px;
+  border-radius: 30px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  color: blue;
+  font-size: 64px;
+  font-weight: bolder;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  gap: 9px;
+}
+
+.underlineContainer {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  align-items: center;
+  width: 80px;
+  height: 6px;
+  background: blue;
+  gap: 9px;
+  border-radius: 9px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: auto;
+}
+
+.input > .errorLabel {
+  color: red;
+  font-size: 12px;
+}
+
+.inputBox {
+  height: 48px;
+  width: 400px;
+  font-size: large;
+  border-radius: 8px;
+  border: 1px solid grey;
+  padding-left: 8px;
+}
