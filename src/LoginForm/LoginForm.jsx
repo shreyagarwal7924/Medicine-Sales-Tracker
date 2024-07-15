@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './LoginForm.css'
+import axios from "axios";
+
 
 const LoginForm = (props) => {
   const [email, setEmail] = useState('')
@@ -10,7 +12,7 @@ const LoginForm = (props) => {
 
   const navigate = useNavigate()
 
-  const onButtonClick = () => {
+  const onButtonClick = (e) => {
     // Set initial error values to empty 
       setEmailError('')
       setPasswordError('')
@@ -35,8 +37,24 @@ const LoginForm = (props) => {
     setPasswordError('The password must be 8 characters or longer')
     return
   }
-  return navigate('/page1')
-  }
+
+  e.preventDefault()
+  axios.post('http://localhost:3001/login', {email,password})
+  .then( result => {
+    if(result.data === 'Success') {
+      navigate('/page1')
+      return
+    }
+    else if(result.data == 'the password is incorrect') {
+      setPasswordError(result.data);
+      return 
+    }
+    else {
+      setEmailError(`${email} is not registered!`)
+      return
+    }
+  })
+}
 
   return (
     <div className={'mainContainer'}>

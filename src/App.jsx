@@ -6,14 +6,6 @@ import LoginForm from "./LoginForm/LoginForm";
 import SignUp from "./SignUpForm/SignUp";
 
 function App() {
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(`http://localhost:3001`)
-      const data = await res.json();
-      console.log(data);
-    }
-    fetchData();
-  },[])
   return (
     <Router>
       <Routes>
