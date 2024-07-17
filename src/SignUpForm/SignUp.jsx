@@ -42,10 +42,11 @@ const SignUp = (props) => {
                 setPasswordError('Please enter your password');
                 return
             }
-            else if (password.length < 7) {
-                setPasswordError('The password must be 8 characters or longer')
-                return
-            }
+            
+        }
+        else if (password.length < 7) {
+            setPasswordError('The password must be 8 characters or longer')
+            return
         }
         e.preventDefault()
         axios.post('http://localhost:3001/SignUp', {name,email,password})

@@ -33,11 +33,6 @@ const LoginForm = (props) => {
     return 
   }
 
-  if (password.length < 7) {
-    setPasswordError('The password must be 8 characters or longer')
-    return
-  }
-
   e.preventDefault()
   axios.post('http://localhost:3001/login', {email,password})
   .then( result => {
