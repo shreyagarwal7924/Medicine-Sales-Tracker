@@ -2,38 +2,73 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import './SignUp.css'
+import axios from "axios";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 const SignUp = (props) => {
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [firstNameError, setfirstNameError] = useState('')
-    const [lastNameError, setlastNameError] = useState('')
+    const [nameError, setNameError] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
 
 
     const navigate = useNavigate()
 
-    const onButtonClick = () => {
-        setfirstNameError('')
-        setlastNameError('')
+    const onButtonClick = (e) => {
+        setNameError('')
         setEmailError('')
         setPasswordError('')
 
-        if (email === '' || firstName === '' || lastName === '' || password === '') {
-            if (firstName === '') setfirstNameError('Please enter your first name')
-            else if(!/^[A-Za-z]+$/.test(firstName)) setfirstNameError('Please enter a valid first name')
-            if (lastName === '') setlastNameError('Please enter your last name');
-            else if(!/^[A-Za-z]+$/.test(lastName)) setlastNameError('Please enter a valid last name ')
-            if (email === '') setEmailError('Please enter your email');
-            else if(!/^[\w-\.]+@([\w-]+\.)+(com|org|net|edu|gov|info|biz|io|tech)$/.test(email)) setEmailError('Please enter a valid email')
-            if (password === '') setPasswordError('Please enter your password');
-            else if (password.length < 7) setPasswordError('The password must be 8 characters or longer')
+        if (email === '' || name === '' || password === '') {
+            if (name === '') {
+                setNameError('Please enter your name')
+                return
+            }
+            else if(!/^[A-Za-z]+$/.test(name)) {
+                setNameError('Please enter a valid name')
+                return
+            }
+            if (email === '') {
+                setEmailError('Please enter your email');
+                return
+            }
+            else if(!/^[\w-\.]+@([\w-]+\.)+(com|org|net|edu|gov|info|biz|io|tech)$/.test(email)) {
+                setEmailError('Please enter a valid email')
+                return
+            }
+            if (password === '') {
+                setPasswordError('Please enter your password');
+                return
+            }
+            
+        }
+        else if (password.length < 7) {
+            setPasswordError('The password must be 8 characters or longer')
             return
         }
-        return navigate("/page1");
+        e.preventDefault()
+        axios.post('http://localhost:3001/SignUp', {name,email,password})
+            .then(result => {
+                if(result.data === 'exists') {
+                    setEmailError(`User already exists`)
+                    return
+                }
+                else if(result.data === 'does not exist') {
+                    navigate('/LoginForm')
+                    return
+                }
+                else if(result.data === 'error') {
+                    setEmailError(`${result.data}`)
+                    return
+                }
+            })
+            .catch(e => {
+                alert(`${e}`)
+                console.log(e);
+            }
+        )
     }
 
     return (
@@ -45,24 +80,14 @@ const SignUp = (props) => {
             <br />
             <div className={'input'}>
                 <input 
-                value={firstName}
-                placeholder = "Enter your First Name"
-                onChange={(e) => setFirstName(e.target.value)}
+                value={name}
+                placeholder = "Enter your Name"
+                onChange={(e) => setName(e.target.value)}
                 className={'inputBox'}
           />
-          <label className="errorLabel">{firstNameError}</label>
+          <label className="errorLabel">{nameError}</label>
           </div>
           <br />
-           <div className={'input'}>
-            <input
-            value={lastName}
-            placeholder="Enter your Last Name"
-            onChange={(ev) => setLastName(ev.target.value)}
-            className={'inputBox'}
-            />
-            <label className="errorLabel">{lastNameError}</label>
-            </div>
-            <br />
             <div className={'input'}>
             <input
             value={email}
@@ -78,6 +103,7 @@ const SignUp = (props) => {
             value={password}
             placeholder="Set a password"
             onChange={(ev) => setPassword(ev.target.value)}
+            type='Password'
             className={'inputBox'}
             />
             <label className="errorLabel">{passwordError}</label>

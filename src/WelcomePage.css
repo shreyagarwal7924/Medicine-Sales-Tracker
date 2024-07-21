@@ -4,7 +4,7 @@ header {
     margin: auto;
     width: 600px;
     margin-top: 300px;
-    background: white;
+    background: #1f2a40;
     padding-bottom: 30px;
     border-radius: 50px;
 }
@@ -16,7 +16,7 @@ h1 {
     gap: 9px;
     width: 100%;
     margin-top: 30px;
-    color: blue;
+    color: white;
     font-size: 30px;
     font-weight: 700;
 }
@@ -34,14 +34,14 @@ h1 {
     align-items: center;
     width: 450px;
     height: 6px;
-    background: blue;
+    background: white;
     border-radius: 9px;
 }
 
 .login, .signup {
     border: none;
-    background: blue;
-    color: white;
+    background: white;
+    color: #1f2a40;
     padding: 12px 24px;
     margin: 8px;
     font-size: 14px;
