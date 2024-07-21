@@ -37,7 +37,7 @@ const LoginForm = (props) => {
   axios.post('http://localhost:3001/login', {email,password})
   .then( result => {
     if(result.data === 'Success') {
-      navigate('/page1')
+      navigate('/page1', {state:{id:email}})
       return
     }
     else if(result.data == 'the password is incorrect') {
@@ -73,6 +73,7 @@ const LoginForm = (props) => {
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
+          type='Password'
           className={'inputBox'}
         />
         <label className="errorLabel">{passwordError}</label>

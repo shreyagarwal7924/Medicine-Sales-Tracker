@@ -1,11 +1,18 @@
 import React from 'react';
 import SideBar from '../SideBar/SideBar'
+import Navbar from '../Components/Navbar';
+import Header from '../Components/Header';
+import { Box } from '@mui/material';
 
-function Page1() {
+const Page1 = () => {
     return(
-       <div>
+       <Box >
         <SideBar/>
-       </div>
+        <Navbar/>
+        <Box display="flex" alignContent="space-between" alignItems="center">
+            <Header title = "DASHBOARD" subtitle= "Welcome to your Dashboard"/>
+        </Box>
+       </Box>
     );
 }
 export default Page1;

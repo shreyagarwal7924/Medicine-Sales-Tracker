@@ -103,6 +103,7 @@ const SignUp = (props) => {
             value={password}
             placeholder="Set a password"
             onChange={(ev) => setPassword(ev.target.value)}
+            type='Password'
             className={'inputBox'}
             />
             <label className="errorLabel">{passwordError}</label>

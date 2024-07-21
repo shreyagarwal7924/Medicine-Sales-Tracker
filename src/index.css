@@ -14,7 +14,6 @@ body {
     Droid Sans,
     Helvetica Neue,
     sans-serif;
-    background: cornflowerblue;
 }
 
 * {
@@ -44,8 +43,8 @@ code {
 
 input[type='button'] {
   border: none;
-  background: blue;
-  color: white;
+  background: white;
+  color: #1f2a40;
   padding: 12px 24px;
   margin: 8px;
   margin: auto;

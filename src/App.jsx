@@ -8,9 +8,14 @@ import Analytics from './Pages/Analytics'
 import Products from './Pages/Products'
 import Parties from './Pages/Parties'
 import Orders from './Pages/Orders'
+import { ColorModeContext, useMode } from "./theme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 
 function App() {
-  return (
+  const [theme,ColorMode] = useMode(); 
+  return ( <ColorModeContext.Provider value = {ColorMode}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
     <Router>
       <Routes>
         <Route path= "/" element= {<WelcomePage/>}/>
@@ -23,6 +28,8 @@ function App() {
         <Route path = '/Orders' element= {<Orders/>}> </Route>
       </Routes>
     </Router>
+    </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 

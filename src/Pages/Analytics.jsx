@@ -1,5 +1,6 @@
 import React from "react";
 import SideBar from "../SideBar/SideBar";
+
 function Analytics() {
     return(
         <div>
