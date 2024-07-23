@@ -10,6 +10,7 @@ app.get('/', async (req, res) => {
     const response = await itemModel.find()
     return res.json({items: response})
 })
+
 connectDB()
 
 app.post('/login', (req,res) => {
