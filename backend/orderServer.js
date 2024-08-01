@@ -8,16 +8,24 @@ app.use(cors());
 app.use(express.json())
 
 app.get('/', async (req, res) => {
-    const response = await orderModel.find();
+    const response = await orderModel.find({});
     return res.json({items: response})
   });
 
   connectDB()
 
 app.post('/add', async (req, res) => {
-    const {orderNumber, name, contact, product, date} = req.body
+    const {email,orderNumber, name, contact, product, date, subtotal} = req.body
     try {
-        const newOrder = await orderModel.create(req.body)
+        const newOrder = await orderModel.create({
+            email,
+            orderNumber,
+            name,
+            contact,
+            product,
+            date,
+            subtotal
+        })
         res.status(201).json(newOrder)
     } catch (error) {
         res.status(400).json({ message: error.message })
@@ -25,9 +33,47 @@ app.post('/add', async (req, res) => {
 })
 
 // Only gets specific values from the database to display in a table
-app.get('/getTable', async (req, res) => {
-    const response = await orderModel.find({}, 'orderNumber name contact date')
+app.post('/getTable', async (req, res) => {
+    const {email} = req.body
+    const response = await orderModel.find({email: email}, 'orderNumber name contact date subtotal')
     return res.json({items: response})
+})
+
+app.post('/getLastOrderNumber', async (req, res) => {
+    const {email} = req.body
+    try {
+        const lastOrder = await orderModel.findOne({ email })
+          .sort({ orderNumber: -1 })
+          .limit(1);
+    
+        let nextOrderNumber;
+        if (lastOrder) {
+          nextOrderNumber = lastOrder.orderNumber + 1;
+        } else {
+          nextOrderNumber = 1; 
+        }
+    
+        res.json({ nextOrderNumber });
+      } catch (error) {
+        console.error("Error getting last order number:", error);
+        res.status(500).json({ message: "Failed to get last order number" });
+      }
+})
+
+app.post('/deleteOrder', async (req, res) => {
+    const { email, orderNumber } = req.body;
+    try {
+        const result = await orderModel.deleteOne({ email, orderNumber });
+        if (result.deletedCount === 1) {
+            res.status(200).json({ message: "Order deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Order not found" });
+        }
+    }
+    catch (error) {
+    console.error("Error deleting order:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 })
 
 app.listen(7001, () => {

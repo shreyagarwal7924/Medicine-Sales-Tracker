@@ -48,4 +48,3 @@ app.post('/SignUp',(req,res) => {
 app.listen(3001, () => {
     console.log('app is running');
 })
-

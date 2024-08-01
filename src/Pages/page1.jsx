@@ -4,8 +4,11 @@ import Navbar from '../Components/Navbar';
 import Header from '../Components/Header';
 import { Box, Button,IconButton,Typography,useTheme } from '@mui/material';
 import { token } from  '../theme';
+import { useLocation } from 'react-router';
 
 const Page1 = () => {
+    const location = useLocation();
+    const email = location.state?.id;
     return(
        <Box >
         <SideBar/>

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import './SignUp.css'
 import axios from "axios";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 const SignUp = (props) => {
     const [name, setName] = useState('')
@@ -49,26 +48,19 @@ const SignUp = (props) => {
             return
         }
         e.preventDefault()
-        axios.post('http://localhost:3001/SignUp', {name,email,password})
+        axios.post('http://localhost:3001/SignUp', {name, email, password})
             .then(result => {
-                if(result.data === 'exists') {
-                    setEmailError(`User already exists`)
-                    return
-                }
-                else if(result.data === 'does not exist') {
+                if(result.data.success) {
+                    localStorage.setItem('userId', result.data.userId);
                     navigate('/LoginForm')
-                    return
-                }
-                else if(result.data === 'error') {
-                    setEmailError(`${result.data}`)
-                    return
+                } else {
+                    setEmailError(result.data.message)
                 }
             })
-            .catch(e => {
-                alert(`${e}`)
-                console.log(e);
-            }
-        )
+            .catch(error => {
+                console.error("Signup error:", error);
+                setEmailError("An error occurred. Please try again.");
+            });
     }
 
     return (

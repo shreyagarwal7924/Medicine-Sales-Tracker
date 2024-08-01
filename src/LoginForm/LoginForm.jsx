@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import './LoginForm.css'
 import axios from "axios";
 
-
 const LoginForm = (props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,6 +36,7 @@ const LoginForm = (props) => {
   axios.post('http://localhost:3001/login', {email,password})
   .then( result => {
     if(result.data === 'Success') {
+      sessionStorage.setItem("email", email)
       navigate('/page1', {state:{id:email}})
       return
     }
