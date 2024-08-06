@@ -7,6 +7,7 @@ import { token } from '../theme';
 import { Grid } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import OrderDescription from './OrderDescription'
 
 
 export default function OrderTable() {
@@ -33,6 +34,8 @@ export default function OrderTable() {
     const [selectedProduct, setSelectedProduct] = useState('');
     const [orderProducts, setOrderProducts] = useState([]);
     const [orderNumber, setOrderNumber] = useState();
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [orderDescriptionOpen, setOrderDescriptionOpen] = useState(false);
     const email = sessionStorage.getItem('email');
 
     const handleDeleteOrder = async (orderNumber) => {
@@ -139,11 +142,26 @@ export default function OrderTable() {
         setOpen(false);
     };
 
+    const handleOrderClick = async (orderNumber) => {
+        try {
+            const response = await axios.post("http://localhost:7001/getOrderDetails", { email, orderNumber });
+            setSelectedOrder(response.data.order);
+            setOrderDescriptionOpen(true);
+        } catch (error) {
+            console.error("Error fetching order details:", error);
+        }
+    };
+
+    const handleCloseOrderDescription = () => {
+        setOrderDescriptionOpen(false);
+        setSelectedOrder(null);
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const formJson = Object.fromEntries(formData.entries());
-
+    
         if (!formJson.date) {
             formJson.date = new Date().toISOString().split('T')[0];
         }
@@ -152,7 +170,6 @@ export default function OrderTable() {
             orderNumber: Number(orderNumber),
             ...formJson,
             products: orderProducts.map(p => ({
-                product: p.id,
                 name: p.name,
                 quantity: p.quantity,
                 sellingPrice: p.sellingPrice,
@@ -163,11 +180,16 @@ export default function OrderTable() {
             subtotal: calculateSubtotal()
         };
 
+        console.log('requestData', requestData)
+    
         try {
             await axios.post("http://localhost:7001/add", requestData);
             handleClose();
+            fetchOrders();
+            fetchLastOrderNumber();
         } catch (error) {
             console.error("Error adding order:", error);
+            alert("An error occurred while adding the order. Please try again.");
         }
     };
 
@@ -369,9 +391,15 @@ export default function OrderTable() {
                     rows={tableData} 
                     columns={columns} 
                     getRowId={(row) => row._id} 
+                    onRowClick={(params) => handleOrderClick(params.row.orderNumber)}
                     autoSize
                 />
             </Box>
+            <OrderDescription
+                open={orderDescriptionOpen}
+                handleClose={handleCloseOrderDescription}
+                order={selectedOrder}
+            />
         </Box>
     );
 }

@@ -8,7 +8,6 @@ const orderSchema = new mongoose.Schema({
     orderNumber: {
         type: Number,
         required: true,
-        unique: true
     },
     name: {
         type: String,
@@ -19,11 +18,6 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     products: [{
-        product: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'products',
-            required: true
-        },
         name: {
             type: String,
             required: true
@@ -49,7 +43,6 @@ const orderSchema = new mongoose.Schema({
             required: true
         }
     }],
-    
     date: {
       type: String,
       required: true
@@ -60,5 +53,6 @@ const orderSchema = new mongoose.Schema({
     }
   });
 
+  orderSchema.index({ email: 1, orderNumber: 1 }, { unique: true });
   const orderModel = mongoose.model("orders", orderSchema);
   module.exports = orderModel;

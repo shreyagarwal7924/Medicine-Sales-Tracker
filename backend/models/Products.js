@@ -7,17 +7,15 @@ const productSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: 12
+        required: true
     },
     packing : {
         type: String,
         required: true
     },
-    pieces: {
-        type: Number,
-    },
-    box: {
-        type: Number,
+    boxorpieces: {
+        type: String,
+        required: true
     },
     company: {
       type: String,
@@ -50,6 +48,10 @@ const productSchema = new mongoose.Schema({
     gst: {
         type: Number,
         required: true
+    },
+    quantity: {
+        type: Number,
+        rerquired: true
     }
   });
 
