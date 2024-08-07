@@ -17,10 +17,13 @@ export default function OrderTable() {
         { field: 'contact', headerName: 'Contact', flex: 1, minWidth: 150, resizable: false , headerAlign: "left", align: "left"},
         { field: 'date', headerName: 'Date', flex:1, resizable: false , minWidth: 150},
         {field: 'subtotal', headerName: 'Sub Total', flex:1, resizable: false, minWidth: 150},
-        {field: 'actions', width: 100,
+        {field: '', width: 100,
           renderCell: (params) => (
-            <Button onClick={() => handleDeleteOrder(params.row.orderNumber)}>
-              <DeleteIcon sx={{color: "white"}}/>
+            <Button 
+            onClick={(event) => handleDeleteOrder(event, params.row.orderNumber)}
+            onMouseDown={(event) => event.stopPropagation()}
+            >
+            <DeleteIcon sx={{color: "white"}}/>
             </Button>
           ),
         },
@@ -38,7 +41,8 @@ export default function OrderTable() {
     const [orderDescriptionOpen, setOrderDescriptionOpen] = useState(false);
     const email = sessionStorage.getItem('email');
 
-    const handleDeleteOrder = async (orderNumber) => {
+    const handleDeleteOrder = async (event,orderNumber) => {
+        event.stopPropagation();
         if (window.confirm("Are you sure you want to delete this order?")) {
           try {
             await axios.post("http://localhost:7001/deleteOrder", { email, orderNumber });
@@ -92,7 +96,8 @@ export default function OrderTable() {
             sellingPrice: product.sellingPrice || 0,
             discount: 0,
             gst: product.gst || 0,
-            amount: product.sellingPrice || 0
+            amount: product.sellingPrice || 0,
+            availableQuantity: product.quantity
         };
     
         setOrderProducts([...orderProducts, newOrderProduct]);
@@ -102,7 +107,11 @@ export default function OrderTable() {
     const updateOrderProduct = (id, field, value) => {
         const updatedProducts = orderProducts.map(product => {
             if (product.id === id) {
-                const updatedProduct = { ...product, [field]: value };
+                let updatedValue = value;
+                if (field === 'quantity') {
+                    updatedValue = Math.min(Math.max(1, parseInt(value)), product.availableQuantity);
+                }
+                const updatedProduct = { ...product, [field]: updatedValue };
                 updatedProduct.amount = calculateAmount(updatedProduct);
                 return updatedProduct;
             }
@@ -179,14 +188,26 @@ export default function OrderTable() {
             })),
             subtotal: calculateSubtotal()
         };
-
-        console.log('requestData', requestData)
     
         try {
-            await axios.post("http://localhost:7001/add", requestData);
+            const orderResponse = await axios.post("http://localhost:7001/add", requestData);
+            console.log("Order added successfully:", orderResponse.data);
+            for (const product of orderProducts) {
+                try {
+                    await axios.post("http://localhost:8001/updateInventory", {
+                        email,
+                        name: product.name,
+                        quantityToSubtract: product.quantity
+                    });
+                    console.log(`Inventory updated for ${product.name}`);
+                } catch (error) {
+                    console.error(`Error updating inventory for ${product.name}:`, error);
+                }
+            }
             handleClose();
             fetchOrders();
             fetchLastOrderNumber();
+            fetchProducts();
         } catch (error) {
             console.error("Error adding order:", error);
             alert("An error occurred while adding the order. Please try again.");
@@ -299,7 +320,7 @@ export default function OrderTable() {
                         >
                             {products.map((product) => (
                             <MenuItem key={product._id} value={product._id}>
-                                {`${product.name}  - HSN: ${product.hsnCode} - Qty: ${product.quantityinCase}`}
+                                {`${product.name}  - HSN: ${product.hsnCode} - Qty: ${product.quantity}`}
                             </MenuItem>
                             ))}
                         </Select>
@@ -336,7 +357,7 @@ export default function OrderTable() {
                                 type="number"
                                 value={product.quantity}
                                 onChange={(e) => updateOrderProduct(product.id, 'quantity', e.target.value)}
-                                inputProps={{ min: 1 }}
+                                inputProps={{ min: 0, max: product.availableQuantity }}
                                 />  
                             </TableCell>
                             <TableCell>{product.sellingPrice}</TableCell>

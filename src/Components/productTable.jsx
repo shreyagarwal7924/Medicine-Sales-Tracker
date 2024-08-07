@@ -22,7 +22,10 @@ export default function ProductTable() {
         {field: 'quantity', headerName: 'Quantity', flex:1, resizable: false, minWidth:150},
         { field: '', width: 100,
           renderCell: (params) => (
-            <Button onClick={() => handleDeleteProduct(params.row.name, params.row.packing)}>
+            <Button 
+            onClick={(event) => handleDeleteProduct(event,params.row.name, params.row.packing)}
+            onMouseDown={(event) => event.stopPropagation()}
+                    >
               <DeleteIcon sx={{color: theme.palette.mode === 'dark' ? 'white' : 'black'}}/>
             </Button>
           ),
@@ -68,7 +71,8 @@ export default function ProductTable() {
     }
   };
 
-  const handleDeleteProduct = async (name, packing) => {
+  const handleDeleteProduct = async (event,name, packing) => {
+    event.stopPropagation();
     if (window.confirm("Are you sure you want to delete this product?")) {
         try {
           await axios.post("http://localhost:8001/deleteProduct", { email, name, packing });
@@ -100,6 +104,11 @@ export default function ProductTable() {
     });
   };
 
+  const handleProductUpdate = (updatedProduct) => {
+    setTableData(prevData => prevData.map(product => 
+      product._id === updatedProduct._id ? updatedProduct : product
+    ));
+  };
   const handleProductChange = (event) => {
     const { name, value } = event.target;
     setNewProduct(prev => ({ ...prev, [name]: value }));
@@ -280,6 +289,7 @@ export default function ProductTable() {
                         open={openProductDescription}
                         handleClose={() => setOpenProductDescription(false)}
                         product={selectedProduct}
+                        onProductUpdate={handleProductUpdate}
                         />
                         </Box>
             );

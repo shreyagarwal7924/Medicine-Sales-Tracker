@@ -32,7 +32,7 @@ app.post('/getTable', async (req, res) => {
 app.post('/getProducts', async (req, res) => {
     const {email} = req.body
     try {
-        const response = await productModel.find({email: email}, 'name hsnCode quantityinCase sellingPrice gst')
+        const response = await productModel.find({email: email}, 'name hsnCode quantity sellingPrice gst')
         return res.json({items: response})
     }
     catch (error) {
@@ -96,6 +96,46 @@ app.post('/getProductDetails', async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   });
+
+  app.post('/addQuantity', async (req, res) => {
+    const { email, name, packing, quantityToAdd } = req.body;
+    try {
+      const product = await productModel.findOne({ email, name, packing });
+      if (!product) {
+        return res.status(404).json({ success: false, message: "Product not found" });
+      }
+  
+      product.quantity += quantityToAdd;
+      await product.save();
+  
+      res.json({ success: true, message: "Quantity added successfully", updatedProduct: product });
+    } catch (error) {
+      console.error("Error adding quantity:", error);
+      res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  });
+
+  app.post('/updateInventory', async (req, res) => {
+    const { email, name, quantityToSubtract } = req.body;
+    try {
+        const product = await productModel.findOne({ email, name });
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        if (product.quantity < quantityToSubtract) {
+            return res.status(400).json({ success: false, message: "Not enough quantity in stock" });
+        }
+
+        product.quantity -= quantityToSubtract;
+        await product.save();
+
+        res.json({ success: true, message: "Inventory updated successfully", updatedProduct: product });
+    } catch (error) {
+        console.error("Error updating inventory:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
 
 app.listen(8001, () => {
     console.log('app is running');
