@@ -1,4 +1,5 @@
 # Medicine Sales Tracker
+<img width="783" alt="Screenshot 2024-09-25 at 4 47 31 PM" src="https://github.com/user-attachments/assets/2226b11a-84f8-4ece-bde6-6b6c78560e4e">
 
 ## Overview
 
