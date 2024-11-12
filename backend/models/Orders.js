@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
     email: {
@@ -55,4 +55,4 @@ const orderSchema = new mongoose.Schema({
 
   orderSchema.index({ email: 1, orderNumber: 1 }, { unique: true });
   const orderModel = mongoose.model("orders", orderSchema);
-  module.exports = orderModel;
+  export default orderModel;

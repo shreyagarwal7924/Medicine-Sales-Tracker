@@ -63,7 +63,7 @@ export default function ProductTable() {
 
   const handleRowClick = async (params) => {
     try {
-      const response = await axios.post("http://localhost:8001/getProductDetails", { email, name: params.row.name, packing: params.row.packing });
+      const response = await axios.get("http://localhost:8001/getProductDetails", { email, name: params.row.name, packing: params.row.packing });
       setSelectedProduct(response.data.product);
       setOpenProductDescription(true);
     } catch (error) {

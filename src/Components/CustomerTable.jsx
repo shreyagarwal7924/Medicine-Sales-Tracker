@@ -10,12 +10,12 @@ import axios from 'axios';
 import OrderDescription from './OrderDescription'
 
 
-export default function OrderTable() {
+export default function CustomerTable() {
     const columns = [
-        { field: 'orderNumber', headerName: 'Order Number', flex: 1, minWidth: 150, resizable: false },
-        { field: 'name', headerName: 'Name',  minWidth: 150, flex: 1, resizable: false , cellClassName: "name-column--cell"},
-        { field: 'contact', headerName: 'Contact', flex: 1, minWidth: 150, resizable: false , headerAlign: "left", align: "left"},
-        { field: 'date', headerName: 'Date', flex:1, resizable: false , minWidth: 150},
+        { field: 'name', headerName: 'Name', flex: 1, minWidth: 150, resizable: false },
+        { field: 'email', headerName: 'Email',  minWidth: 150, flex: 1, resizable: false , cellClassName: "name-column--cell"},
+        { field: 'phone', headerName: 'Phone Number', flex: 1, minWidth: 150, resizable: false , headerAlign: "left", align: "left"},
+        { field: 'address', headerName: 'Address', flex:1, resizable: false , minWidth: 150},
         {field: 'subtotal', headerName: 'Sub Total', flex:1, resizable: false, minWidth: 150},
         {field: '', width: 100,
           renderCell: (params) => (

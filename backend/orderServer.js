@@ -1,8 +1,7 @@
-const express = require('express');
-const connectDB = require('./ordersDB.js')
-const orderModel = require('./models/Orders.js')
-const cors = require('cors');
-const productModel = require('./models/Products.js');
+import express from 'express';
+import connectDB from './ordersDB.js';
+import orderModel from './models/Orders.js';
+import cors from 'cors';
 
 const app = express()
 app.use(cors());
@@ -93,3 +92,6 @@ app.post('/getOrderDetails', async (req, res) => {
 app.listen(7001, () => {
     console.log('app is running');
 })
+// onSuccess: () => {
+    // queryClient.invalidateQueries(['name of the cluster])
+    // }

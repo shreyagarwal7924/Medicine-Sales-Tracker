@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start-database": "node ./backend/index.js & node ./backend/productServer.js & node ./backend/orderServer.js"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",

@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import { connect } from 'mongoose';
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(
+        const conn = await connect(
             'mongodb+srv://shreyagarwal7924:TI4Ck2JKugHQBBYb@cluster0.woc8pj0.mongodb.net/Orders?retryWrites=true&w=majority&appName=Cluster0'
             );
             console.log(`MongoDB connected: Orders`);
@@ -13,4 +13,4 @@ const connectDB = async () => {
     }
 };
 
-module.exports = connectDB;
+export default connectDB;

@@ -1,7 +1,7 @@
-const express = require('express');
-const connectDB = require('./productDB.js')
-const productModel = require('./models/Products.js')
-const cors = require('cors');
+import express from 'express';
+import connectDB from './productDB.js';
+import productModel from './models/Products.js';
+import cors from 'cors';
 
 const app = express()
 
